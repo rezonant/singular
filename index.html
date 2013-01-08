@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+		<img src="img/logo.png" style="max-width:100%;" />
+        <!-- Add your site or application content here -->
+        <p>Singular provides a simple, yet powerful two-way data binding layer for HTML5 and Javascript. It is similar in many ways to
+		Google's <a href="http://angularjs.org/">Angular</a> framework, but takes a more direct, easier-to-use approach to the problem.
+		Singular is designed to make it easy to gradually retrofit existing "non-angular" style Javascript projects to using two way
+		data binding.</p>
+
+		<h2>Simple Example</h2>
+		What's your name? <input type="text" sg:model="yourName" placeholder="Type your name here." /><br/>
+		<div sg:visible="yourName != ''">
+			Oh, hello there <span sg:model="yourName"></span>!
+		</div>
+
+		<h2>Each</h2>
+		<div style="display:inline-block;width:12em;">
+			A list of coins (click to edit)
+			<ul sg:each="coins">
+				<li sg:model="name" contenteditable="true"></li>
+			</ul>
+		</div>
+
+		<div style="display:inline-block;width:12em;">
+			The same list of coins
+			<ul sg:each="coins">
+				<li sg:model="name" contenteditable="true"></li>
+			</ul>
+		</div>
+
+		<br/>
+		Add a coin: <input type="text" class="coinText" /> <button sg:click="$model.add('coins', {name: $('input.coinText').val()});">Add</button>
+
+		<h2>Nested Use</h2>
+		<div sg:use="level1">
+			<div sg:model="label"></div>
+			<div sg:use="level2">
+				<div sg:model="label"></div>
+				<div sg:use="level3">
+					<div sg:model="label"></div>
+				</div>
+			</div>
+		</div>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
+		<script src="js/classModel.js"></script>
+		<script src="js/singular.js"></script>
+        <script src="js/plugins.js"></script>
+		<script>
+			$appModel.attributes = {
+				coins: [
+					{name:'Penny'},
+					{name:'Nickel'},
+					{name:'Dime'},
+					{name:'Quarter'}
+				],
+				level1: {
+					label: 'Level 1',
+					level2: {
+						label: 'Level 2',
+						level3: {
+							label: 'Level 3'
+						}
+					},
+					level3: {
+						label: 'WRONG Level 3'
+					}
+				},
+				level2: {
+					label: 'WRONG Level 2'
+				},
+				level3: {
+					label: 'WRONG Level 3'
+				}
+			};
+		</script>
+        <script src="js/main.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>
