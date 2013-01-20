@@ -1,0 +1,62 @@
+/*
+	Document   : singular
+	Created on : Jan 19, 2013, 11:54:56 PM
+	Author     : liam
+	Description:
+	Purpose of the stylesheet follows.
+*/
+.sgTemplate {
+  display: none; }
+
+.sgInspector .sgLogo {
+  height: 7em;
+  position: absolute;
+  z-index: -1;
+  top: -1.7em;
+  left: -3em;
+  max-width: initial; }
+.sgInspector .message {
+  float: right;
+  width: 23em;
+  font-size: 75%;
+  color: #ccc;
+  position: relative;
+  z-index: -2; }
+.sgInspector input[type=text] {
+  border: 1px solid #cccccc;
+  background-color: #eee;
+  color: #444;
+  margin: 5px 0; }
+.sgInspector .hider {
+  position: absolute;
+  bottom: 0.5em;
+  right: 0.5em; }
+.sgInspector .launcher {
+  padding: 0.5em;
+  position: fixed;
+  bottom: -2px;
+  right: -2px;
+  background-color: #e9e9e9;
+  border-radius: 5px; }
+.sgInspector .launcher a {
+  color: #757575;
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+  width: 100%;
+  height: 100%; }
+.sgInspector .panel {
+  position: fixed;
+  z-index: 100;
+  top: -20em;
+  right: 0;
+  width: 30em;
+  max-width: 90%;
+  padding: 1em;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); }
+.sgInspector .answer {
+  display: block;
+  max-height: 20em;
+  overflow-y: auto;
+  margin-bottom: 2em; }

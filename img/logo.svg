@@ -13,7 +13,7 @@
    height="362.14285"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.1 r9760"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="logo.svg"
    inkscape:export-filename="/home/liam/Documents/Code/Web/singular/img/logo.png"
    inkscape:export-xdpi="49.704144"
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="1596.2311"
-     inkscape:cy="168.21428"
+     inkscape:zoom="0.7"
+     inkscape:cx="691.94539"
+     inkscape:cy="38.21428"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -38,9 +38,9 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      inkscape:window-width="1366"
-     inkscape:window-height="691"
-     inkscape:window-x="0"
-     inkscape:window-y="1"
+     inkscape:window-height="713"
+     inkscape:window-x="-7"
+     inkscape:window-y="-10"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
@@ -50,7 +50,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -62,7 +62,7 @@
     <g
        id="g3048"
        transform="matrix(0.92110454,0,0,0.92110454,-797.99343,112.04323)"
-       style="stroke:#aeaeae;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
+       style="stroke:#ececec;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none">
       <path
          d="m 1257.1428,442.36218 c 0,98.62228 -26.8629,178.57143 -60,178.57143 -33.1371,0 -60,-79.94915 -60,-178.57143 0,-98.62227 26.8629,-178.57142 60,-178.57142 33.1371,0 60,79.94915 60,178.57142 z"
          sodipodi:ry="178.57143"
@@ -70,7 +70,7 @@
          sodipodi:cy="442.36218"
          sodipodi:cx="1197.1428"
          id="path3010"
-         style="fill:none;stroke:#aeaeae;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         style="fill:none;stroke:#ececec;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          sodipodi:type="arc" />
       <path
          d="m 1257.1428,442.36218 c 0,98.62228 -26.8629,178.57143 -60,178.57143 -33.1371,0 -60,-79.94915 -60,-178.57143 0,-98.62227 26.8629,-178.57142 60,-178.57142 33.1371,0 60,79.94915 60,178.57142 z"
@@ -79,7 +79,7 @@
          sodipodi:cy="442.36218"
          sodipodi:cx="1197.1428"
          id="path3010-0"
-         style="fill:none;stroke:#aeaeae;stroke-width:3.94051027;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         style="fill:none;stroke:#ececec;stroke-width:3.94051026999999987;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          sodipodi:type="arc"
          transform="matrix(0.5,0.8660254,-1.3943305,0.8050171,1215.3705,-950.50304)" />
       <path
@@ -89,13 +89,13 @@
          sodipodi:cy="442.36218"
          sodipodi:cx="1197.1428"
          id="path3010-0-5"
-         style="fill:none;stroke:#aeaeae;stroke-width:4.87294817;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         style="fill:none;stroke:#ececec;stroke-width:4.87294816999999991;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          sodipodi:type="arc"
          transform="matrix(-0.25881905,0.96592583,-1.0169514,-0.27249132,1956.8471,-593.44914)" />
     </g>
     <text
        xml:space="preserve"
-       style="font-size:220.51371765px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:'It wasn\'t me';-inkscape-font-specification:'It wasn\'t me'"
+       style="font-size:220.51371764999998959px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#666666;fill-opacity:1;stroke:none;font-family:'It wasn\'t me';-inkscape-font-specification:'It wasn\'t me'"
        x="259.68689"
        y="569.30774"
        id="text2985"
@@ -106,14 +106,14 @@
          y="569.30774">singular</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:54.87043762px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Murder Of Mayday;-inkscape-font-specification:Murder Of Mayday"
-       x="353.03769"
-       y="633.83777"
+       style="font-size:54.87043762px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#b3b3b3;fill-opacity:1;stroke:none;font-family:Murder Of Mayday Light;-inkscape-font-specification:'Murder Of Mayday Light,'"
+       x="297.32339"
+       y="640.98065"
        id="text2985-9"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan2987-1"
-         x="353.03769"
-         y="633.83777">simple HTML5 data binding layer</tspan></text>
+         x="297.32339"
+         y="640.98065">simple HTML5 data binding layer</tspan></text>
   </g>
 </svg>
