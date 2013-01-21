@@ -94,13 +94,25 @@ textarea {
    ========================================================================== */
 
 
+div.aside {
+	width:40em;
+	max-width:100%;
+	
+	float:right;
+}
+
 pre {
-	max-width:30em;
+	/*max-width:30em;*/
 	font-size:80%;
 }
 
+.indent {
+	padding-left:2em;
+}
 
-
+input[type=text], input[type=button], button {
+	vertical-align: baseline;
+}
 
 
 

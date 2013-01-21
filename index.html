@@ -1,31 +1,37 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!DOCTYPE html>            <!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7">       <![endif]--><!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8">              <![endif]--><!--[if IE 8]>
+<html class="no-js lt-ie9">                     <![endif]--><!--[if gt IE 8]><!-->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:sg="http://slvr.tv/oss/singular"
+	  class="no-js">                            <!--<![endif]-->
+	
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width" />
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <link rel="stylesheet" href="css/normalize.css" />
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/main.css" />
         <link rel="stylesheet" href="css/singular.css" />
 		<link rel="stylesheet" href="js/vendor/prismjs/prism.css" />
 		
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
-    <body class="language-markup">
+    <body class="language-markup" data-model="foooo">
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
-		<img src="img/singular.png" style="max-width:100%;" />
+		<img src="img/singular.png" alt="singular" style="max-width:100%;" />
 
+		<h2>Introduction</h2>
         <p>Singular provides a simple, yet powerful two-way data binding layer for HTML5 and Javascript. It is similar in many ways to
 		Google's <a href="http://angularjs.org/">Angular</a> framework, but takes a more direct, easier-to-use approach to the problem.
 		Singular is designed to make it easy to gradually retrofit existing "non-angular" style Javascript projects to using two way
@@ -39,7 +45,7 @@
 
 		<p>All Singular pages have at least one model, called window.$appModel. You can use the box in the upper right hand corner to
 			explore the $appModel of this page, and make changes. Every change you make to a linked attribute should be reflected in this page.</p>
-		<div style="float:right">
+		<div class="aside">
 			<pre><code>
 &lt;input type="text" sg:model="yourName" />&lt;br/>
 &lt;div sg:visible="yourName != ''">
@@ -48,11 +54,11 @@
 			</code></pre>
 		</div>
 
-		<h2>sg:model, sg:visible</h2>
+		<h3><a name="modelVisible">sg:model, sg:visible</a></h3>
 
 		What's your name? <input type="text" sg:model="yourName" placeholder="Type your name here." /><br/>
 		<div sg:visible="yourName != ''">
-			Oh, hello there <span sg:model="yourName"></span>!
+			Oh, hello there <span class="label label-info" sg:model="yourName"></span>!
 		</div>
 
 		<div class="language-javascript">
@@ -65,17 +71,18 @@
 			<code>library.songs[2]</code> such as <code>name</code> or <code>duration</code>. You may use, e.g., <code>$appModel.use('library.songs[2]')</code>
 			as a shortcut to create sub-models.</p>
 
-			<p>Unless you intervene, all top-level <code>SingularModel</code> instances inherit from <code>$appModel</code>. Any number of models
+			<p>Unless you intervene <span class="label label-info" sg:model="yourName" sg:visible="yourName != ''"></span>, all top-level <code>SingularModel</code> instances inherit from <code>$appModel</code>. Any number of models
 			may inherit from any other model as a sub-model.
 			Models have an infinite number of model attributes, which each can have subattributes etc., creating
 			a deep keyed tree, just like any other Javascript object. In fact, if you've inspected Singular using DevTools or Firebug,
 			$appModel.attributes is the top-level model object where all attributes and values live, but you should not modify it except in
 			edge cases (like startup, shutdown, or for avoiding change notifications for some reason).
 			You do not interact with model objects from Javascript quite
-			the same way, but you won't need Javascript to get started.</p>
+			the same way, but <span class="label label-info" sg:model="yourName" sg:visible="yourName != ''"></span>, you won't need Javascript to get started.</p>
 		</div>
 
-		<p>Singular's markup API is a simple, if battle-hardened convenience layer on top of the SingularModel API. Use <code>$model.get()</code> to
+		<p>You might not be surprised <span class="label label-info" sg:model="yourName" sg:visible="yourName != ''"></span> that Singular's markup
+			API is a simple, if battle-hardened convenience layer on top of the <a href="#SingularModel">SingularModel</a> API. Use <code>$model.get()</code> to
 		retrieve an entry respecting model inheritance and fallbacks, use <code>$model.set()</code> to change attribute values while triggering the
 		proper change events, use <code>$model.watch</code> to attach a change event to a particular attribute name. The attribute names supported
 		by these methods may be any valid identifiers, separated by dots. Additionally, any component of the path may have an array index at the end,
@@ -90,7 +97,7 @@
 		<div style="clear:right"></div>
 
 
-		<div style="float:right">
+		<div class="aside">
 			<pre><code>
 &lt;script>
 	$appModel.set('coins', [
@@ -117,7 +124,7 @@ Add a coin:
 			</code></pre>
 		</div>
 
-		<h2>sg:each, sg:click</h2>
+		<h3><a name="eachAndClick">sg:each, sg:click</a></h3>
 		<p>Below, we use <code>sg:each</code> to generate markup for each item of an array within the model. In this
 		case the array is stored in the <code>'coins'</code> attribute.</p>
 		<div style="display:inline-block;width:12em;">
@@ -134,11 +141,11 @@ Add a coin:
 			</ul>
 		</div>
 		<br/>
-		Add a coin: <input type="text" class="coinText" /> <button sg:click="$model.add('coins', {name: $('input.coinText').val()});">Add</button>
+		Add a coin: <input type="text" class="coinText" /> <button class="btn" sg:click="$model.add('coins', {name: $('input.coinText').val()});">Add</button>
 
 		<div style="clear:right"></div>
-		
-		<div style="float:right">
+
+		<div class="aside">
 			<pre><code>&lt;script>
 	$appModel.set('level1', { label: 'Level 1',
 		level2: { label: 'Level 2',
@@ -164,19 +171,22 @@ Add a coin:
 			</code></pre>
 		</div>
 		
-		<h2>sg:use, sg:view, @</h2>
+		<h2><a name="useViewAt">sg:use, sg:view, @</a></h2>
 		<p>Add sg:use to modify the base attribute path for references within a section of markup.
 			Any Singular references below that element will be relative to the attribute value
 			of the sg:use. This behavior is identical to that of a sub-model, and indeed this attribute
 			is functionally equivalent to <code>$contextModel.use('attributeValue')</code>. For performance
 			reasons however, sg:use does not generate any models. Instead, all models know how to calculate
 			the proper prefix based on the sg:use attributes in use around them.</p>
-		<p>Use <code>sg:view</code> to create markup from a template that you have previously defined.
+		<p>Use <cdode>sg:view</code> to create markup from a template that you have previously defined.
 			Define a template by giving it an ID and attaching the <code>sgTemplate</code> class. Be sure to include <code>singular.css</code>
-			or <code>singular.scss</code> in the page, or elements with <code>.sgTemplate</code> will appear on your page, singular's stylesheet
-			hides them.
-			<strong>Note:</strong> If there is a
+			or <code>singular.scss</code> in the page so elements with <code>.sgTemplate</code> do not appear on your page. When sg:view is
+			processed, Singular takes special care to not copy the sgTemplate class, so the final instance of the template will be visible.</p>
+
+		<h3><a name="viewClasses">View Classes</a></h3>
+		<p>If there is a
 			class with the same name as the view ID, it will be instantiated and attached to the element.
+			Such classes should inherit from SingularView using <a href="">Class.extend</a>.
 			Finally, Singular is run on the resulting view instance markup. The Singular context will be
 			either the context of Singular during the <code>sg:view</code> operation, or a sub-model rooted at the
 			value of the <code>sg:model</code> attribute placed next to the <code>sg:view</code> attribute.</p>
@@ -201,7 +211,7 @@ Add a coin:
 
 
 
-		<div style="float:right">
+		<div class="aside">
 			<pre><code>
 &lt;script>
 	$appModel.set('coins', [
@@ -224,7 +234,7 @@ Add a coin:
 			</code></pre>
 		</div>
 
-		<h2>sg:each + sg:view</h2>
+		<h2><a name="eachAndView">sg:each + sg:view</a></h2>
 		<p>You can also combine <code>sg:each</code> and <code>sg:view</code> so you can declare your markup elsewhere from where you call 
 			<code>sg:each</code>. In this case, we can use it to avoid duplicating the per-item markup for the two identical
 			<code>sg:each</code> operations.</p>
@@ -247,7 +257,7 @@ Add a coin:
 
 		<div style="clear:right"></div>
 
-		<h2>Attribute Paths</h2>
+		<h2><a name="attributePaths">Attribute Paths</a></h2>
 		<p>Attribute paths are relative references to slots in the data model. Each component in an attribute path is separated by a dot (<code>.</code>).
 		Each component is typically an alphanumeric string. They may also contain underscores. The end of each component may also have an array reference
 		containing a numeral such as <code>[35]</code> which may be used to access individual array values. Since the model is just a deep Javascript object,
@@ -259,7 +269,20 @@ console.log($appModel.get('aString.length'));
 		<p>However, unless you add code to trigger changes on it using <code class="language-javascript">$model.set('aString.length')</code>, 
 		<code>sg:model</code> links to paths like <code>aString.length</code> will not stay synchronized for performance and reliability reasons.
 
-		<h2>Markup Reference</h2>
+		<h2><a name="contextModel">Calling Singular</a></h2>
+		<p>Adding <code>singular.js</code> will not cause any Singular behaviors to be added to your page. You must directly call
+			<code class="language-javascript">$().singular()</code> to get started. It is convention to put all of your Singular markup beneath
+			<code>&lt;div class="application">&lt;/div></code> (except for markup templates). Here's how you might initialize
+			the Singular markup on your page:</p>
+		<pre><code class="language-javascript">$('.application').singular();</code></pre>
+		<p>When you use Singular like this, all attribute references in your markup will be relative to window.$appModel. You can override
+			this by passing in an argument to <code>$().singular()</code>. The following code might be used along with markup like
+			<code>&ltdiv id="project-51">&lt;span sg:model="name">Project name here&lt;/span>&lt;/div></code></p>
+		<pre><code class="language-javascript">$('#project-51').singular($appModel.use('projects[51]'));</code></pre>
+		<p>While Singular always installs a top-level model object into <code>window.$appModel</code>, you
+			are still free to choose your own model objects and pass them to Singular instead. </p>
+
+		<h2><a name="markup">Markup Reference</a></h2>
 		<p>When called with <code>$().singular()</code>, Singular will perform a single deep search, using all matched query elements as roots. It searches for
 		any elements with any <code>sg:*</code> attribute(s) on them. It then processes each <code>sg:*</code> attribute of each element in an order 
 		predetermined within the Singular source code. Unsupported attributes are ignored. Certain conditions will cause Singular to ignore attributes. 
@@ -268,40 +291,174 @@ console.log($appModel.get('aString.length'));
 		Singular behaviors, but is actually used by Singular to track which behaviors have been applied to the model and the DOM, preventing Singular
 		from processing them again should it be asked to.</p>
 
+		<h3>The sg: prefix and HTML validation</h3>
+		<p>Out of the box, Singular markup will not currently validate using the W3C Validator tool. This is also the case with the recommended
+			syntax for Angular (ie <code>ng-xxx</code>). The difference is that Singular's variant could potentially be made to validate
+			should the W3C begin allowing XML namespaces as a flexible and safe way to combine third-party attribute sets in an validate-friendly way.</p>
 		<h3><code>sg:model="model.attribute"</code></h3>
-		<p>Syncs the model attribute with the inner HTML of the element with an attached sg:model attribute. If the host element is a non-disabled input, select,
-		textarea or or other input, the view will be capable of changing the model. Singular also understands <code>contenteditable="true"</code>, so edits
-		made by users on such elements are reflected in all attached model attributes.</p>
+		<div class="indent">
+			<p>Keeps <code>model.attribute</code> of the current <a href="#contextModel">Context Model</a> synced with the inner markup of the host element.
+				If the host element is an input, textarea, or select, the value or selection status will be modified as appropriate.
+				For non-disabled inputs and editable elements (<code>contenteditable="true"</code>) the view will also be capable of changing
+				the model. You may specify whether to enable instant value updates or only when the user blurs the input or editable element 
+				by using <code>sg:mode</code>. Set <code>sg:mode="instant"</code> (default) or <code>sg:mode="blur"</code> to disable instant updates.</p>
+		</div>
 
 		<h3><code>sg:map="attr:model.attribute;..."</code></h3>
-		<p>Syncs one or more HTML attributes with corresponding model attributes. The list is styled like a CSS property list, with semicolons between
-		pairs, and colons between key and value. The key is the HTML attribute, the value is the model attribute. The final attribute name will be composed
-		from the model chain and sg:use declarations above the host element.</p>
+		<div class="indent">
+			<p>Syncs one or more HTML attributes with corresponding model attributes. The list is styled like a CSS property list, with semicolons between
+				pairs, and colons between key and value. The key is the HTML attribute, the value is the model attribute. The final attribute name will be composed
+				from the model chain and sg:use declarations above the host element.</p>
+		</div>
 
 		<h3><code>sg:each="model.attribute;..."</code></h3>
-		<p>Creates markup beneath the host element corresponding to each item in the array stored in
-			the given model attribute. You may pair this with <code>sg:view</code> to load the per-item
-			markup from a template from elsewhere in the document. <code>sg:each</code> is always
-			processed before directives beneath it.</p>
+		<div class="indent">
+			<p>Creates markup beneath the host element corresponding to each item in the array stored in
+				the given model attribute. You may pair this with <code>sg:view</code> to load the per-item
+				markup from a template from elsewhere in the document. <code>sg:each</code> is always
+				processed before directives beneath it.</p>
+		</div>
 
 		<h3><code>sg:visible="expr"</code></h3>
-		<p>Make element visible when <code>expr</code> evaluates to <code>true</code>, invisible otherwise.</p>
+		<div class="indent">
+			<p>Make element visible when <code>expr</code> evaluates to <code>true</code>, invisible otherwise.</p>
+		</div>
 
 		<h3><code>sg:checked="expr"</code></h3>
-		<p>Make element checked when <code>expr</code> evaluates to <code>true</code>, unchecked otherwise.</p>
+		<div class="indent">
+			<p>Make element checked when <code>expr</code> evaluates to <code>true</code>, unchecked otherwise.</p>
+		</div>
 
 		<h3><code>sg:selected="expr"</code></h3>
-		<p>Make element selected when <code>expr</code> evaluates to <code>true</code>, unselected otherwise.</p>
+		<div class="indent">
+			<p>Make element selected when <code>expr</code> evaluates to <code>true</code>, unselected otherwise.</p>
+		</div>
 
 		<h3><code>sg:use="namespace"</code></h3>
-		<p>Rebase all model references beneath the host element to be relative to the given "namespace". Effectively
-		creates a sub-model, allowing you to omit the attribute prefix in your references.</p>
+		<div class="indent">
+			<p>Rebase all model references beneath the host element to be relative to the given "namespace". Effectively
+			creates a sub-model, allowing you to omit the attribute prefix in your references.</p>
+		</div>
 
 		<h3><code>sg:ignore</code></h3>
-		<p>Do not process any Singular directives beneath the host element.</p>
+		<div class="indent">
+			<p>Do not process any Singular directives beneath the host element.</p>
+		</div>
 
 		<h3><code>sg:click="code"</code></h3>
-		<p>Execute a click handler with access to $model, which is set to be the current context model.</p>
+		<div class="indent">
+			<p>Execute a click handler with access to $model, which is set to be the current context model.</p>
+		</div>
+
+		<h2><a name="expressions">Expressions</a></h2>
+		<p>In some cases, Singular accepts simple, non-executable expressions to offer additional flexibility.
+		Such expressions primarily allow for comparisons either between model attributes or between attributes
+		and constant values.</p>
+
+		<pre><code class="language-markup">
+&lt;div sg:visible="membership == 'gold'">
+	This content is only shown when the 
+	"membership" model attribute is 'gold'.
+&lt;div>
+		</code></pre>
+
+		<h3><a name="operators">Operators</a></h3>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Operator</th>
+					<th>Help</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>==</code></td>
+					<td>Check that the two values are equal.</td>
+				</tr>
+				<tr>
+					<td><code>!=</code></td>
+					<td>Check that the two values are not equal.</td>
+				</tr>
+				<tr>
+					<td><code>&gt;</code></td>
+					<td>Check that the left-hand value is greater than the right-hand value.</td>
+				</tr>
+				<tr>
+					<td><code>&lt;</code></td>
+					<td>Check that the left-hand value is less than the right-hand value.</td>
+				</tr>
+				<tr>
+					<td><code>&gt;=</code></td>
+					<td>Check that the left-hand value is greater than or equal to the right-hand value.</td>
+				</tr>
+				<tr>
+					<td><code>&lt;=</code></td>
+					<td>Check that the left-hand value is less than or equal to the right-hand value.</td>
+				</tr>
+				<tr>
+					<td><code>!</code></td>
+					<td>Invert a boolean, from true to false or false to true.</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<h2><a name="classModel">Class Model</a></h2>
+		<p>Singular bundles and uses John Resig's simple inheritance library for Javascript. For isolation, the base class
+		is renamed to <code>SingularClass</code>. For more information about Resig's class model,
+		<a href="http://ejohn.org/blog/simple-javascript-inheritance/">click here</a>.</p>
+
+		<p>Inheriting from <code>SingularClass</code>-family classes is straightforward:</p>
+
+		<pre><code class="language-javascript">
+MyClass = SingularClass.extend({
+	init: function(param1) {
+	},
+
+	method: function() {
+		alert('hellooo!');
+	}
+});
+
+MySubClass = MyClass.extend({
+	init: function(param1, param2) {
+		this._super(param1);
+	},
+
+	method: function() {
+		this._super();
+		alert('wooorrldd!');
+	}
+});
+
+// When MySubClass.method is called, shows both alerts
+</code></pre>
+
+	<div class="language-javascript">
+		<h2><a name="classes">Class Reference</a></h2>
+		<p>This section details the Javascript API for Singular. Singular tries to give you almost complete control of the model and interactions
+		with it. You are not required to use uniform REST resources, and you are easily able to manipulate model objects from whatever plain Javascript
+		events you happen to be working with.</p>
+		<h3><a name="SingularModel"><code>SingularModel = SingularClass.extend({ /* ... */ });</code></a></h3>
+
+		<div class="indent">
+			<p><code>SingularModel</code> is the base class of all data model objects. It provides an API for retrieving and manipulating potentially
+				nested "attribute paths". Values in the tree may be objects, arrays, or primitives. The paths can drill into these as well as primitive
+				sub-properties.</p>
+
+			<hr/>
+			<h4><code>/* SingularModel */ get(attributePath)</code></h4>
+			<p>Retrieve the current value of a given attribute path. If the attribute cannot be found, the
+				parent model is checked and any matching value returned.</p>
+			<h4><code>/* SingularModel */ set(attributePath, [value])</code></h4>
+			<p>Change the value of a given attribute path. Any callbacks registered with <code>.watch()</code>
+			will be fired with the new value.</p>
+			<h4><code>/* SingularModel */ watch(attributePath, callback(value))</code></h4>
+			<p>Call the given callback function with <code>attributePath</code>'s value when it changes.</p>
+		</div>
+
+		<h3><code>SingularView</code></h3>
+		<h3><code>SingularController</code></h3>
+	</div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js"><\/script>')</script>
