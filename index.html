@@ -57,7 +57,7 @@
 		<h3><a name="modelVisible">sg:model, sg:visible</a></h3>
 
 		What's your name? <input type="text" sg:model="yourName" placeholder="Type your name here." /><br/>
-		<div sg:visible="yourName != ''">
+		<div sg:visible="yourName != ''" sg:transition="slide">
 			Oh, hello there <span class="label label-info" sg:model="yourName"></span>!
 		</div>
 
@@ -71,27 +71,31 @@
 			<code>library.songs[2]</code> such as <code>name</code> or <code>duration</code>. You may use, e.g., <code>$appModel.use('library.songs[2]')</code>
 			as a shortcut to create sub-models.</p>
 
-			<p>Unless you intervene <span class="label label-info" sg:model="yourName" sg:visible="yourName != ''"></span>, all top-level <code>SingularModel</code> instances inherit from <code>$appModel</code>. Any number of models
-			may inherit from any other model as a sub-model.
-			Models have an infinite number of model attributes, which each can have subattributes etc., creating
-			a deep keyed tree, just like any other Javascript object. In fact, if you've inspected Singular using DevTools or Firebug,
-			$appModel.attributes is the top-level model object where all attributes and values live, but you should not modify it except in
-			edge cases (like startup, shutdown, or for avoiding change notifications for some reason).
-			You do not interact with model objects from Javascript quite
-			the same way, but <span class="label label-info" sg:model="yourName" sg:visible="yourName != ''"></span>, you won't need Javascript to get started.</p>
+			<p>Unless you intervene <span class="label label-info" sg:model="yourName" sg:visible="yourName != ''"></span>, 
+				all top-level <code>SingularModel</code> instances have <code>window.$appModel</code> as their parent. Any number of models
+			may exist, inheriting from any other model. Models are just Javascript objects which may have any number of attributes,
+			which may be objects that contain sub-attributes, creating a deep keyed tree.</p>
+
+			<p>Use <code>$model.get()</code> to retrieve an entry respecting model inheritance and fallbacks, use <code>$model.set()</code> to
+				change attribute values while triggering the proper change events, use <code>$model.watch</code> to attach a change event to
+				a particular attribute name. The attribute names supported by these methods may be any valid identifiers, separated by dots.
+				Additionally, any component of the path may have an array index at the end, with a numeric token inside.</p>
+
+			<p>Just like any other Javascript object! In fact,
+			if you've inspected Singular using DevTools or Firebug, <code>window.$appModel.attributes</code> is the top-level model object where all attributes
+			and values live, but you should not modify it except in edge cases (like startup, shutdown, or for avoiding change notifications for some reason).</p>
+
+			<p>OK, you don't interact with SingularModels quite the same way as normal objects, but
+			<span class="label label-info" sg:model="yourName" sg:visible="yourName != ''"></span>, you won't even need Javascript to get started.</p>
 		</div>
 
-		<p>You might not be surprised <span class="label label-info" sg:model="yourName" sg:visible="yourName != ''"></span> that Singular's markup
-			API is a simple, if battle-hardened convenience layer on top of the <a href="#SingularModel">SingularModel</a> API. Use <code>$model.get()</code> to
-		retrieve an entry respecting model inheritance and fallbacks, use <code>$model.set()</code> to change attribute values while triggering the
-		proper change events, use <code>$model.watch</code> to attach a change event to a particular attribute name. The attribute names supported
-		by these methods may be any valid identifiers, separated by dots. Additionally, any component of the path may have an array index at the end,
-		with a numeric token inside.</p>
+		<p>Singular's markup API is merely a simple, if battle-hardened convenience layer on top of the <a href="#SingularModel">SingularModel</a> API. See
+		the rest of the examples for more on that.</p>
 
 		<p>Singular supports watching simple, fast expressions related to model attributes using <code>$model.expr()</code> and
-			<code>$model.watchExpr()</code>. These expressions can be used with <code>sg:visible</code>, used to dictate whether
-			an element is visible or not. For some class, add sg:transition (with values "slide" or "fade") to apply an animation.
-		Singular also offers sg:checked and sg:selected for <code>&lt;input></code> and
+			<code>$model.watchExpr()</code>. These expressions can be used with <code>sg:visible</code> to dictate whether
+			an element is visible or not. For extra class, add <code>sg:transition</code> (with values "slide" or "fade") to apply an animation.
+		Singular also offers <code>sg:checked</code> and <code>sg:selected</code> for <code>&lt;input></code> and
 		<code>&lt;select></code>, respectively.
 		</p>
 		<div style="clear:right"></div>
@@ -184,7 +188,7 @@ Add a coin:
 			processed, Singular takes special care to not copy the sgTemplate class, so the final instance of the template will be visible.</p>
 
 		<h3><a name="viewClasses">View Classes</a></h3>
-		<p>If there is a
+		<p>If there is a Javascript
 			class with the same name as the view ID, it will be instantiated and attached to the element.
 			Such classes should inherit from SingularView using <a href="">Class.extend</a>.
 			Finally, Singular is run on the resulting view instance markup. The Singular context will be
@@ -222,8 +226,10 @@ Add a coin:
 	]);
 &lt;/script>
 
-&lt;ul id="coinLi" sg:ignore style="display:none;">
-	&lt;li sg:model="name" contenteditable="true">&lt;/li>
+&lt;ul id="coinLi" class="sgTemplate">
+    &lt;li class="label label-info" style="margin:5px; 0;">
+		&lt;span sg:model="name" contenteditable="true">&lt;/span>
+	&lt;/li>
 &lt;/ul>
 
 &lt;ul sg:each="coins" sg:view="coinLi">&lt;/ul>
@@ -237,9 +243,9 @@ Add a coin:
 		<h2><a name="eachAndView">sg:each + sg:view</a></h2>
 		<p>You can also combine <code>sg:each</code> and <code>sg:view</code> so you can declare your markup elsewhere from where you call 
 			<code>sg:each</code>. In this case, we can use it to avoid duplicating the per-item markup for the two identical
-			<code>sg:each</code> operations.</p>
-		<ul id="coinLi" sg:ignore style="display:none;">
-			<li sg:model="name" contenteditable="true"></li>
+			<code>sg:each</code> operations, and add some style to boot(strap).</p>
+		<ul id="coinLi" class="sgTemplate">
+			<li class="label label-info" style="margin:5px; 0;"><span sg:model="name" contenteditable="true"></span></li>
 		</ul>
 
 		<div style="display:inline-block;width:12em;">
@@ -275,7 +281,8 @@ console.log($appModel.get('aString.length'));
 			<code>&lt;div class="application">&lt;/div></code> (except for markup templates). Here's how you might initialize
 			the Singular markup on your page:</p>
 		<pre><code class="language-javascript">$('.application').singular();</code></pre>
-		<p>When you use Singular like this, all attribute references in your markup will be relative to window.$appModel. You can override
+		<p>When you use Singular like this, all attribute references in your markup will be relative to window.$appModel unless you change that using
+			<code>sg:use</code>, <code>sg:each</code>, or <code>sg:view</code> + <code>sg:model</code>. You can override
 			this by passing in an argument to <code>$().singular()</code>. The following code might be used along with markup like
 			<code>&ltdiv id="project-51">&lt;span sg:model="name">Project name here&lt;/span>&lt;/div></code></p>
 		<pre><code class="language-javascript">$('#project-51').singular($appModel.use('projects[51]'));</code></pre>
@@ -304,6 +311,7 @@ console.log($appModel.get('aString.length'));
 				by using <code>sg:mode</code>. Set <code>sg:mode="instant"</code> (default) or <code>sg:mode="blur"</code> to disable instant updates.</p>
 		</div>
 
+		<h3>Attributes</h3>
 		<h3><code>sg:map="attr:model.attribute;..."</code></h3>
 		<div class="indent">
 			<p>Syncs one or more HTML attributes with corresponding model attributes. The list is styled like a CSS property list, with semicolons between
@@ -311,7 +319,7 @@ console.log($appModel.get('aString.length'));
 				from the model chain and sg:use declarations above the host element.</p>
 		</div>
 
-		<h3><code>sg:each="model.attribute;..."</code></h3>
+		<h3><code>sg:each="model.attribute"</code></h3>
 		<div class="indent">
 			<p>Creates markup beneath the host element corresponding to each item in the array stored in
 				the given model attribute. You may pair this with <code>sg:view</code> to load the per-item
@@ -321,23 +329,30 @@ console.log($appModel.get('aString.length'));
 
 		<h3><code>sg:visible="expr"</code></h3>
 		<div class="indent">
-			<p>Make element visible when <code>expr</code> evaluates to <code>true</code>, invisible otherwise.</p>
+			<p>Make element visible when <code>expr</code> evaluates to <code>true</code>, invisible otherwise.
+			Add <code>sg:transition</code> for animation. Options include <code>slide</code>, <code>fade</code>,
+			or <code>default</code> for no animations.
+			</p>
+
 		</div>
 
 		<h3><code>sg:checked="expr"</code></h3>
 		<div class="indent">
-			<p>Make element checked when <code>expr</code> evaluates to <code>true</code>, unchecked otherwise.</p>
+			<p>Make element checked when <code>expr</code> evaluates to <code>true</code>, unchecked otherwise. Link
+			is bidirectional.</p>
 		</div>
 
 		<h3><code>sg:selected="expr"</code></h3>
 		<div class="indent">
-			<p>Make element selected when <code>expr</code> evaluates to <code>true</code>, unselected otherwise.</p>
+			<p>Make element selected when <code>expr</code> evaluates to <code>true</code>, unselected otherwise. Link
+			is bidirectional.</p>
 		</div>
 
 		<h3><code>sg:use="namespace"</code></h3>
 		<div class="indent">
 			<p>Rebase all model references beneath the host element to be relative to the given "namespace". Effectively
-			creates a sub-model, allowing you to omit the attribute prefix in your references.</p>
+			creates a sub-model, allowing you to omit the attribute prefix in your references. Use sparingly, sometimes
+			the result of <code>sg:use</code> resolution can be unexpected!</p>
 		</div>
 
 		<h3><code>sg:ignore</code></h3>

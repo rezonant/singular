@@ -6,7 +6,7 @@
  */
 
 !function(document, $, console, undefined) {
-	var devMode = false;		// Set to true to enable console.log within this module
+	var devMode = true;		// Set to true to enable console.log within this module
 
 	if (window.__singular_init)
 		return;
@@ -17,7 +17,7 @@
 		console = { log: function(m) { } };
 
 	/////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * Determine if we are nested within an sg:each, sg:view, or any other
 	 * late-bound Singular construct.
@@ -50,7 +50,61 @@
 		return found;
 	};
 
-	
+	var tokenize = function(expr, options) {
+		var tokens = [], buf = [], withinString = false, stringStart = 0;
+
+		options = $.extend({
+			whitespace: true
+		}, options);
+
+		for (var i = 0; i < expr.length; ++i) {
+			var currentChar = expr[i],
+				regexWhitespace = /^\s+$/,			regexIdentifier = /^[A-Za-z_][A-Za-z0-9_]*$/,
+				regexNumeric	= /^[0-9]+$/,		regexOperators	= /^(&&|\|\||\+\+|--|==|!=|>=|<=|\*=|\/=)$/,
+				regexTokens = [ regexWhitespace, regexIdentifier, regexNumeric, regexOperators ];
+
+			if (withinString === false) {
+				// Put the buffer and the incoming character together to make a "prospect" to examine.
+				var prospect = buf.length > 0 ? buf.join('') + currentChar : currentChar,
+					valid = false;
+
+				// Set valid = true if we find a valid token in the prospect
+				$(regexTokens).each(function(j, regex) { return !(valid = prospect.match(regex)); });
+
+				// If this doesn't look good, its a token boundary.
+				if (!valid && buf.length > 0) {
+					var push = true;
+
+					if (!options.whitespace && buf.join('').match(regexWhitespace))
+						push = false;
+
+					if (push)
+						tokens.push(buf.join(''));
+					
+					buf = [];
+				}
+			}
+
+			if (withinString !== false && currentChar == withinString) {
+				withinString = false;
+			} else if (currentChar == '\'' || currentChar == '"') {
+				withinString = currentChar;
+				stringStart = i;
+			}
+			
+			buf.push(currentChar);
+		}
+
+		if (withinString !== false)
+			throw new Error('singular: Parse error: Unterminated string literal started at column '+stringStart);
+
+		if (buf.length > 0)
+			tokens.push(buf.join(''));
+		
+		return tokens;
+	};
+
+
 	var isNestedInUse = function(e) {
 		if ($(e).parents('[sg\\:use]').length > 0)
 			return true;
@@ -119,12 +173,12 @@
 		hide: function() {
 			$appModel.set('sgInspector.lookup', '');
 			$appModel.set('sgInspector.answer', '');
-			
+
 			$(this.$attachPoint).find('.panel').animate({top: '-20em'});
 			$(this.$attachPoint).find('.launcher').animate({bottom: '-2px'});
 		}
 	});
-	
+
 	SingularInspector.install = function() {
 		if ($('#-SingularInspector').length == 0) {
 			$('body').append($('<div id="-SingularInspector" class="sgInspector sgTemplate" sg:use="sgInspector">'+
@@ -216,6 +270,7 @@
 
 			var name = $appModel.get('sgInspector.lookup');
 
+			console.log('inspector change value for '+name+' to value '+value);
 			ignoreChange = true;
 			$appModel.set(name, value);
 			ignoreChange = false;
@@ -233,11 +288,18 @@
 
 			if (typeof namespace == 'undefined')
 				namespace = '';
-			
+
 			this.parent = parent;
+
+			while (namespace.indexOf('.') === 0 && namespace.length > 0)
+				namespace = namespace.substr(1);
+
+			while (namespace.lastIndexOf('.') === namespace.length - 1 && namespace.length > 0)
+				namespace = namespace.substr(0, namespace.length - 1);
+
 			this.parentPrefix = namespace;
 			this.forwardChanges = (this.parent != null);
-			
+
 			this.watchers = {};
 			this.attributes = {};
 			this.anyWatchers = [];
@@ -288,6 +350,7 @@
 		},
 
 		get: function(name) {
+					console.log('srsly');
 			if (typeof name == 'undefined') {
 				return null;
 			}
@@ -314,6 +377,9 @@
 			else
 				current = null;
 
+			var previous = null;
+
+					console.log('ahm');
 			while (current != null && index < path.length) {
 				var component = path[index];
 
@@ -322,22 +388,74 @@
 					continue;
 				}
 
+				var execute = false;
+				var argList = null;
+
+				console.log('one: '+component);
+				if (component.lastIndexOf(')') == component.length - 1) {
+					// Function call
+					execute = true;
+					argList = []
+
+
+					var args = component.substr(component.indexOf('(') + 1);
+					args = args.substr(0, args.length - 1);
+					console.log('wtf');
+					var tokens = tokenize(args);
+					var argBuf = [];
+
+					console.log('exec func call');
+					!function() {
+						// Prepare the expected environment for eval()
+
+						var self = current;
+						console.log('looks like: '+argBuf.join('').replace(/%/, 'self'));
+						$(tokens).each(function(i,token) {
+							if (token == ',') {
+								argList.push(eval(argBuf.join('').replace(/%/, 'self')));
+								argBuf = [];
+							} else {
+								argBuf.push(token);
+							}
+						});
+
+						if (argBuf.length > 0)
+							argList.push(eval(argBuf.join('').replace(/%/, 'self')));
+					}();
+					console.log('function args');
+					console.log(argList);
+
+					// Remove the args
+					component = component.substr(0, component.lastIndexOf('('));
+				}
+
 				if (component.charAt(0) == '[') {
 					var sub = parseInt(component.substr(1, component.length - 2));
+					previous = current;
 					current = current[sub];
 					++index;
 					continue;
 				}
 
 				if (component == '@') {
+					previous = current;
 					current = this.where()+'.'+path.slice(0, index).join('.');
 					++index;
 				} else if (current[component]) {
+					previous = current;
 					current = current[component];
 					++index;
 				} else {
+					previous = current;
 					current = null;
 					break;
+				}
+
+				// Execute
+
+				if (execute) {
+					console.log('**EXPERIMENTAL: get() function execute');
+					current = current.apply(previous, argList);
 				}
 			}
 
@@ -361,33 +479,9 @@
 		},
 
 		evaluate: function(expr) {
-			var tokens = [];
-			var buf = [];
-			var str = false;
-			var self = this;
-
-			for (var i = 0; i < expr.length; ++i) {
-				var ch = expr[i];
-
-				if (str === false && ch == ' ') {
-					tokens.push(buf.join(''));
-					buf = [];
-				} else {
-					if (ch == '\'') {
-						if (str === false)
-							str = i;
-						else
-							str = false;
-					}
-					buf.push(ch);
-				}
-			}
-
-			if (str !== false) {
-				throw new Error('singular: Parse error: Unterminated string literal started at column '+str);
-			}
 
 			var dependencies = [];
+			var self = this;
 
 			var resolve = function(t) {
 				if (t[0] == '\'') {
@@ -408,9 +502,7 @@
 				return value;
 			};
 
-			if (buf.length > 0)
-				tokens.push(buf.join(''));
-
+			var tokens = tokenize(expr, {whitespace:false});
 			var truth = false;
 			var evaluator;
 			var map = {};
@@ -511,6 +603,12 @@
 				return;
 			}
 
+			var oldName = name;
+			while (name.length >= 3 && name.indexOf('.$') == name.length - 2 && name.length > 0)
+				name = name.substr(0, name.length - 2);
+
+
+			console.log('fucked it up: '+oldName+' to '+name);
 			if (!this.watchers[name])
 				this.watchers[name] = [];
 
@@ -522,7 +620,10 @@
 
 			if (this.forwardChanges && this.parent) {
 				console.log('attaching parent watcher to '+this.parentPrefix+'.'+name);
-				this.parent.watch(this.parentPrefix+'.'+name, responder, false);
+				this.parent.watch(this.parentPrefix+'.'+name, function(value) {
+					console.log('parent watcher caught change to '+name+': '+value);
+					responder(value);
+				}, false);
 			}
 		},
 
@@ -530,15 +631,23 @@
 			if (!this.watchers[name])
 				return;
 
+			console.log('fire responders '+name+' to '+value+' from '+oldValue);
+			// If we aren't already doing so, fire any handlers attached to the identity for this property.
+			if (name.lastIndexOf('$') !== name.length - 1) {
+				console.log('identity fire '+name+'.$');
+				this._fireResponders(name+'.$', value, oldValue);
+			}
+
 			if (typeof oldValue == 'undefined')
 				oldValue = null;
 
 			$(this.anyWatchers).each(function(i,e) {
+				console.log('firing anywatcher change to '+name+', new value: '+value+', old value: '+oldValue);
 				e(name, value);
 			});
 
 			$(this.watchers[name]).each(function(i,e) {
-				console.log('firing change');
+				console.log('firing change to '+name+', new value: '+value+', old value: '+oldValue);
 				e(value);
 			});
 
@@ -608,6 +717,8 @@
 				var oldValue = null;
 
 				if (name.indexOf('.') >= 0) {
+
+					// Retrieve the object of the final attribute
 					var rent = name.substr(0, name.lastIndexOf('.'));
 					var leaf = name.substr(name.lastIndexOf('.')+1);
 					var rentObj = this.get(rent);
@@ -617,17 +728,39 @@
 						this.set(rent, rentObj);
 					}
 
-					if (rentObj[leaf])
-						oldValue = rentObj[leaf];
+					if (leaf.match(/.*\[.*\]/)) {
+						console.log('**EXPERIMENTAL array set');
+						var param = leaf.substr(0, leaf.indexOf('['));
+						var sub = leaf.substr(leaf.indexOf('[')+1);
+						sub = parseInt(sub.substr(0, sub.length - 1));
 
-					rentObj[leaf] = value;
+						oldValue = rentObj[param][sub];
+						rentObj[param][sub] = value;
+					} else {
+						if (rentObj[leaf])
+							oldValue = rentObj[leaf];
+
+						rentObj[leaf] = value;
+					}
+
 				} else {
-					if (this.attributes[name])
-						oldValue = this.attributes[name];
+					if (name.match(/.*\[.*\]/)) {
+						console.log('**EXPERIMENTAL array set B');
+						var param = name.substr(0, name.indexOf('['));
+						var sub = name.substr(name.indexOf('[')+1);
+						sub = parseInt(sub.substr(0, sub.length - 1));
 
-					this.attributes[name] = value;
+						console.log('array set \''+param+'\' sub \''+sub+'\' to \''+value+'\'');
+						this.attributes[param][sub] = value;
+					} else {
+						if (this.attributes[name])
+							oldValue = this.attributes[name];
+
+						this.attributes[name] = value;
+					}
 				}
 
+				console.log('from model.set fire responders for '+name+' to '+value);
 				this._fireResponders(name, value, oldValue);
 			}
 		}
@@ -675,7 +808,7 @@
 			$($('#-'+type).get(0).attributes).each(function(i,e) {
 				if (e.name == 'id')
 					return;
-				
+
 				$(self).attr(e.name, e.value);
 			});
 
@@ -688,7 +821,10 @@
 		// Don't forget to calculate the sg:use chain.
 
 		var prefix = calculateUsePrefix(this);
-		var $subModel = $model.use(prefix);
+		var $subModel = $model;
+
+		//if (prefix != '')
+		//	$subModel = $model.use(prefix);
 
 		if ($(this).attr('sg:model'))
 			$subModel = $model.use($(this).attr('sg:model'));
@@ -737,7 +873,7 @@
 			var type = $(e).attr('sg:view');
 
 			$(e).attr('sg:view', '#'+type);
-			
+
 			if ($(e).attr('sg:each') !== undefined)
 				return false;	// each does it's own sg:view handling
 
@@ -829,7 +965,115 @@
 		handlers.map = function(e) {
 			var map = $(e).attr('sg:map').split(';');
 
+			if ($(e).attr('sg:map') == 'fuck') {
+				alert('WHAAATT DAAAFUUQQQ');
+			}
+
+			var autoMap = (function() {
+				var returnSet = [];
+				$($(e).prop('attributes')).each(function(i,attrib) {
+					console.log('checkin attrrrr '+attrib.name+' to value '+attrib.value);
+					if (attrib.name.indexOf('sg:') === 0)
+						return;
+
+					var name	= attrib.name,
+						value	= attrib.value,
+						brace	= false,		buf = [],
+						attr	= false,		endr = false,
+						attrBuf = null;
+
+					if (value.indexOf('{{') < 0)
+						return;
+					
+					for (var x = 0; x < value.length; ++x) {
+						var currentChar = value[x];
+
+						if (endr) {
+							if (currentChar == '}') {
+								// flush that shit
+								var attrName = attrBuf.join('');
+								attrBuf = [];
+								buf.push({type:'dynamic', value:attrName, rendering:$model.get(attrName)});
+								endr = false;
+								continue;
+							}
+						} else if (attr) {
+							if (currentChar == '}') {
+								endr = true;
+								attr = false;
+								continue;
+							} else {
+								attrBuf.push(currentChar);
+								continue;
+							}
+						} else if (brace) {
+							if (currentChar == '{') {
+								attr = true;
+								attrBuf = [];
+								brace = false;
+								continue;
+							}
+						} else {
+							if (currentChar == '{') {
+								brace = true;
+								continue;
+							} else {
+								brace = false;
+							}
+						}
+
+						buf.push({type:'static', value:currentChar});
+					}
+
+					returnSet.push({
+						name: attrib.name,
+						events: buf
+					});
+				});
+
+				return returnSet;
+			})();
+
+			if (autoMap.length > 0) {
+				console.log('&&&&&&&&&&automap');
+				console.log(autoMap);
+			}
+			
+			$(autoMap).each(function(i,attributeContents) {
+				var deps = [];
+
+				$(attributeContents.events).each(function(i,event) {
+					if (event.type != 'dynamic')
+						return;
+
+					deps.push(event.value);
+				});
+
+				var renderAttributes = function() {
+					var contents = '';
+					$(attributeContents.events).each(function(i,event) {
+						if (event.type == 'static')
+							contents += event.value;
+						else {
+							contents += $model.get(event.value);
+						}
+					});
+
+					$(e).attr(attributeContents.name, contents);
+				};
+
+				renderAttributes();
+				$(deps).each(function(i,dep) {
+					$model.watch(dep, function(value) {
+						renderAttributes();
+					}, false);
+				});
+
+			});
+
 			$(map).each(function(i,pair) {
+				if (pair == 'auto')
+					return;
 				var kv = pair.split(':', 2);
 				var attrName = kv[0], modelName = kv.length > 1 ? kv[1] : '';
 				var prefix = calculateUsePrefix(e, $model);
@@ -845,12 +1089,26 @@
 
 		handlers.visible = function(e) {
 			var expr = $(e).attr('sg:visible');
+			var transition = 'plain';
+
+			if ($(e).attr('sg:transition') !== undefined)
+				transition = $(e).attr('sg:transition');
 
 			$model.watchExpr(expr, function(value) {
 				if (value) {
-					$(e).show();
+					if (transition == 'slide')
+						$(e).slideDown();
+					else if (transition == 'fade')
+						$(e).fadeIn();
+					else
+						$(e).show();
 				} else {
-					$(e).hide();
+					if (transition == 'slide')
+						$(e).slideUp();
+					else if (transition == 'fade')
+						$(e).fadeOut();
+					else
+						$(e).hide();
 				}
 			});
 		};
@@ -939,6 +1197,7 @@
 				});
 			}
 
+			console.log('sg:model: watching '+prefix+attr+' fo changes');
 			if (e.nodeName == 'INPUT' || e.nodeName == 'TEXTAREA') {
 				$model.watch(prefix+attr, function(value) {
 
@@ -975,9 +1234,9 @@
 
 			if (isNested(e))
 				return;
-			
+
 			$(operations).each(function(oo,oper) {
-				
+
 				if ($(e).attr('sg:'+oper) == undefined)
 					return;
 
@@ -991,10 +1250,11 @@
 				// "Cap" the attribute so it won't be processed again.
 				if (result != false)
 					$(e).attr('sg:'+oper, '#'+attrValue);
-				
+
 				//return false; // don't return so that we can run multiple operations on a single node, like sg:map+sg:model for instance.
 			});
 		});
+
 	};
 
 	$.fn.singular.installer = function() { };
