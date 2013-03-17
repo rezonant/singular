@@ -6,6 +6,14 @@
 	Purpose of the stylesheet follows.
 */
 
+[sg\:visible] { 
+	display:none;
+}
+
+.sg-processing {
+	display:none;
+}
+
 .sgTemplate {
 	display:none;
 }

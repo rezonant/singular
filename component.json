@@ -1,0 +1,16 @@
+{
+  "name": "singular",
+  "version": "0.2.0",
+  "main": "index.html",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "jquery": "~1.9.1"
+  },
+  "devDependencies": {
+    "jasmine": "~1.3.1"
+  }
+}
