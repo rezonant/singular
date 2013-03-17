@@ -216,7 +216,7 @@ Add a coin:
 			<code>sg:each</code> operations, and add some style to boot(strap).</p>
 		
 		<script>
-			$appModel.attributes = {
+			$appModel.attributes = $.extend($appModel.attributes, {
 				coins: [
 					{name:'Penny'},
 					{name:'Nickel'},
@@ -241,7 +241,7 @@ Add a coin:
 				level3: {
 					label: 'WRONG Level 3'
 				}
-			};
+			});
 		</script>
 		
 		<ul id="coinLi" class="sgTemplate">
